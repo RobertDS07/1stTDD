@@ -1,17 +1,26 @@
 const User = require('../models/User')
+const bcrypt = require('bcryptjs')
 
 const resolvers = {
-    hello: 'hello world',
+    login: async ({ email, password }) => {
+        const user = await User.findOne({ email })
+
+        const token = '123456'
+
+        if (!!user && await bcrypt.compare(password, user.password)) {
+            return token
+        } return "As credenciais não batem com as do nosso sitema"
+    },
 
     createUser: async ({ name, email, password }) => {
         const verifyEmail = await User.findOne({ email })
 
         if (!!verifyEmail) {
-            return { error: "Este email já existe" }
+            return "Este email já existe"
         }
 
         if (password.length < 5) {
-            return { error: "A senha deve conter pelo menos 5 caracteres" }
+            return "A senha deve conter pelo menos 5 caracteres"
         }
 
         const newUser = {
@@ -22,7 +31,7 @@ const resolvers = {
 
         await User.create(newUser)
 
-        const token = '123456' 
+        const token = '123456'
 
         return token
     }

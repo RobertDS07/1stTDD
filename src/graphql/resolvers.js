@@ -9,18 +9,18 @@ const resolvers = {
 
         if (!!user && await bcrypt.compare(password, user.password)) {
             return token
-        } return "As credenciais não batem com as do nosso sitema"
+        } return new Error("As credenciais não batem com as do nosso sitema")
     },
 
     createUser: async ({ name, email, password }) => {
         const verifyEmail = await User.findOne({ email })
 
         if (!!verifyEmail) {
-            return "Este email já existe"
+            return new Error('Este email já existe')
         }
 
         if (password.length < 5) {
-            return "A senha deve conter pelo menos 5 caracteres"
+            return new Error("A senha deve conter pelo menos 5 caracteres")
         }
 
         const newUser = {

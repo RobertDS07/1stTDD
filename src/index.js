@@ -2,12 +2,14 @@ const express = require('express')
 const {graphqlHTTP} = require('express-graphql')
 const mongoose = require('mongoose')
 require('dotenv').config()
+const cors = require('cors')
 
 const schema = require('./graphql/schema.gql')
 const resolvers = require('./graphql/resolvers.js')
 const {DB} = require('./config/config')
 
 const app = express()
+app.use(cors())
 
 mongoose.connect(DB, {
     useCreateIndex: true,
